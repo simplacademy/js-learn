@@ -1,0 +1,40 @@
+.accordion-button:focus {
+    border-color: white
+}
+
+.sub-topic {
+    cursor: pointer;
+    font-size: 0.75rem;
+    font-weight: 500;
+    padding: 0.25rem 0.5rem
+}
+
+.sub-topic:hover {
+    background-color: #EEE;
+}
+
+.accordion-button::after {
+    display: none
+}
+
+.topic-list {
+    height: 500px
+}
+
+.accordion-button {
+    padding: 0.25rem 0.5rem
+}
+
+.accordion-body {
+    padding: 0.25rem 0rem
+}
+
+.active {
+    background-color: blue;
+    color: white
+}
+
+.active:hover {
+    background-color: blue;
+    color: white
+}

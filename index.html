@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+    <link rel="stylesheet" href="styles/styles.css">
+    <title>JavaScript</title>
+</head>
+
+<body>
+    <div class="container-fluid">
+        <h1>JavaScript</h1>
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="topic-list overflow-auto">
+                    <div class="accordion" id="topicList">
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-9">
+                <h1 class="display-6" id="title"></h1>
+                <iframe id="media" src="https://player.vimeo.com/video/519893527" width="640" height="564"
+                    frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0"
+        crossorigin="anonymous"></script>
+    <script src="js/script.js"></script>
+    <script>
+        let topicList = [];
+        for (subTopic of mediaContent) {
+            if (!topicList.includes(subTopic.topic)) {
+                topicList.push(subTopic.topic);
+            }
+        }
+
+        for (topicName of topicList) {
+            let subTopics = getSubTopicDivs(topicName);
+            let topicDisplay = 
+                `<div class="accordion-item">
+                    <button class="accordion-button">
+                        ${topicName}
+                    </button>
+                    <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="${topicName}"
+                        data-bs-parent="#topicList">
+                        <div class="accordion-body">
+                            ${subTopics}
+                        </div>
+                    </div>
+                </div>`;
+            document.getElementById("topicList").insertAdjacentHTML("beforeend", topicDisplay);
+            
+        }
+
+        function getSubTopicDivs(topicName) {
+            let subTopicDivs = "";
+            for (subTopic of mediaContent) {
+                if (subTopic.topic == topicName) {
+                    let subTopicDiv = `<div id="${subTopic.id}" class="sub-topic">${subTopic.subTopic}</div>`;
+                    subTopicDivs += subTopicDiv;
+                }
+            }
+            return subTopicDivs;
+        }
+
+        let subTopicList = document.getElementsByClassName("sub-topic");
+        for (let i = 0; i < subTopicList.length; i++) {
+            subTopicList[i].addEventListener("click", function (event) {
+                for (let j = 0; j < subTopicList.length; j++) {
+                    subTopicList[j].className = "sub-topic";
+                }
+                event.target.className = "sub-topic active";
+                document.getElementById("media").src = mediaContent[event.target.id - 1].media;
+                document.getElementById("title").innerText = mediaContent[event.target.id - 1].subTopic;
+                localStorage.setItem("mediaId", (event.target.id - 1));
+            });
+        }
+
+        window.addEventListener('load', function () {
+            let mediaId = localStorage.getItem("mediaId");
+            document.getElementById("media").src = mediaContent[mediaId].media;
+            document.getElementById("title").innerText = mediaContent[mediaId].subTopic;
+            document.getElementById(parseInt(mediaId) + 1).scrollIntoView();
+            document.getElementById(parseInt(mediaId) + 1).className = "sub-topic active";
+        });
+    </script>
+</body>
+
+</html>
